@@ -18,14 +18,14 @@ Board::Board(){
     rectangleQueen = sf::IntRect(2*PIXELS_PER_SQUARE,2*PIXELS_PER_SQUARE,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE);
     rectangleKnishop = sf::IntRect(2*PIXELS_PER_SQUARE,3*PIXELS_PER_SQUARE,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE);
 
-    rectanglePawnCaptured = sf::IntRect(PIXELS_PER_SQUARE,0,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE);
-    rectangleKnookCaptured = sf::IntRect(PIXELS_PER_SQUARE,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE);
-    rectangleHorseyCaptured = sf::IntRect(PIXELS_PER_SQUARE,2*PIXELS_PER_SQUARE,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE);
-    rectangleRookCaptured = sf::IntRect(PIXELS_PER_SQUARE,3*PIXELS_PER_SQUARE,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE);
-    rectangleBishopCaptured = sf::IntRect(3*PIXELS_PER_SQUARE,0,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE);
-    rectangleKingCaptured = sf::IntRect(3*PIXELS_PER_SQUARE,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE);
-    rectangleQueenCaptured = sf::IntRect(3*PIXELS_PER_SQUARE,2*PIXELS_PER_SQUARE,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE);
-    rectangleKnishopCaptured = sf::IntRect(3*PIXELS_PER_SQUARE,3*PIXELS_PER_SQUARE,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE);
+    rectanglePawnGrab = sf::IntRect(PIXELS_PER_SQUARE,0,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE);
+    rectangleKnookGrab = sf::IntRect(PIXELS_PER_SQUARE,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE);
+    rectangleHorseyGrab = sf::IntRect(PIXELS_PER_SQUARE,2*PIXELS_PER_SQUARE,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE);
+    rectangleRookGrab = sf::IntRect(PIXELS_PER_SQUARE,3*PIXELS_PER_SQUARE,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE);
+    rectangleBishopGrab = sf::IntRect(3*PIXELS_PER_SQUARE,0,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE);
+    rectangleKingGrab = sf::IntRect(3*PIXELS_PER_SQUARE,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE);
+    rectangleQueenGrab = sf::IntRect(3*PIXELS_PER_SQUARE,2*PIXELS_PER_SQUARE,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE);
+    rectangleKnishopGrab = sf::IntRect(3*PIXELS_PER_SQUARE,3*PIXELS_PER_SQUARE,PIXELS_PER_SQUARE,PIXELS_PER_SQUARE);
 
     textureBoard.loadFromFile("textures/board.png");
     spriteBoard.setTexture(textureBoard);
@@ -166,6 +166,7 @@ void Board::drawMoves(Piece * piece){
 // We just placed a piece in a valid position so we have to do stuff
 Outcome Board::changeTurn(){
     // heldPiece->hasMoved is now true
+    // heldPiece has correct
     // heldPiece is now null
     // Update matrix, eliminate old piece, put piece in new position
     // If position has value eliminate piece and add animation and window movements
@@ -202,12 +203,14 @@ void Board::play(){
                     // We check if there is a piece of the right color under the mouse
                     Piece * p = pieces[mousePosition.y / PIXELS_PER_SQUARE][mousePosition.x / PIXELS_PER_SQUARE];
                     if(p != NULL && ((p->isWhite && whitesTurn) || (!p->isWhite && !whitesTurn)) && p->movements != NULL){
-                        if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-                            // The mouse is on a piece so we show its possible moves
-                            drawMoves(p);
-                        } else {
-                            // We pressed a key so we hold the piece we are pointing at
+                        // The mouse is on a piece so we show its possible moves
+                        drawMoves(p);
+                        if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+                            // We clicked on a piece so we hold it
                             heldPiece = p;
+                            sf::IntRect rectangle(p->sprite.getTextureRect());
+                            rectangle.left+=PIXELS_PER_SQUARE;
+                            heldPiece->sprite.setTextureRect(rectangle);
                         }
                     }
                 } else {
@@ -232,7 +235,14 @@ void Board::play(){
                             }
                         }
                         if(!found) {
+                            // If the position is invalid, we send the piece to its original place and
+                            // set the sprite to the normal one
                             heldPiece->sprite.setPosition(sf::Vector2f(heldPiece->file * PIXELS_PER_SQUARE, heldPiece->rank * PIXELS_PER_SQUARE));
+
+                            sf::IntRect rectangle(heldPiece->sprite.getTextureRect());
+                            rectangle.left-=PIXELS_PER_SQUARE;
+                            heldPiece->sprite.setTextureRect(rectangle);
+
                             heldPiece = NULL;
                         }
                     }

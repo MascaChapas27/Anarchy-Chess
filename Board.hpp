@@ -33,15 +33,15 @@ private:
     sf::IntRect rectangleQueen;
     sf::IntRect rectangleKnishop;
 
-    // Rectangles for every piece but after being captures
-    sf::IntRect rectanglePawnCaptured;
-    sf::IntRect rectangleKnookCaptured;
-    sf::IntRect rectangleHorseyCaptured;
-    sf::IntRect rectangleRookCaptured;
-    sf::IntRect rectangleBishopCaptured;
-    sf::IntRect rectangleKingCaptured;
-    sf::IntRect rectangleQueenCaptured;
-    sf::IntRect rectangleKnishopCaptured;
+    // Rectangles for every piece but when they are being grabbed
+    sf::IntRect rectanglePawnGrab;
+    sf::IntRect rectangleKnookGrab;
+    sf::IntRect rectangleHorseyGrab;
+    sf::IntRect rectangleRookGrab;
+    sf::IntRect rectangleBishopGrab;
+    sf::IntRect rectangleKingGrab;
+    sf::IntRect rectangleQueenGrab;
+    sf::IntRect rectangleKnishopGrab;
 
     // Texture that contains the board
     sf::Texture textureBoard;

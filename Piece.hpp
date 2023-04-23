@@ -32,7 +32,7 @@ private:
     // True if the piece has moved, false if not.
     // Useful for pawns (move double in the first move)
     // and kings, rooks and knooks (castling)
-    bool hasMoved;;
+    bool hasMoved;
 
 public:
     Piece(int file, int rank, Type type, bool isWhite, sf::Texture * texture, sf::IntRect rectangle, int pixelsPerSquare);
