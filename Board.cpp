@@ -166,7 +166,7 @@ void Board::drawMoves(Piece * piece){
 // We just placed a piece in a valid position so we have to do stuff
 Outcome Board::changeTurn(){
     // heldPiece->hasMoved is now true
-    // heldPiece has correct
+    // heldPiece has correct sprite
     // heldPiece is now null
     // Update matrix, eliminate old piece, put piece in new position
     // If position has value eliminate piece and add animation and window movements
@@ -195,7 +195,7 @@ void Board::play(){
             sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 
             // If the mouse has a valid position, inside of the window...
-            if(mousePosition.y > 0 && mousePosition.y < HEIGHT*PIXELS_PER_SQUARE-1 && mousePosition.x > 0 && mousePosition.y < WIDTH*PIXELS_PER_SQUARE-1){
+            if(mousePosition.y > 0 && mousePosition.y < HEIGHT*PIXELS_PER_SQUARE-1 && mousePosition.x > 0 && mousePosition.x < WIDTH*PIXELS_PER_SQUARE-1){
 
                 // If there is no piece being held currently...
                 if(heldPiece == NULL){
@@ -254,15 +254,18 @@ void Board::play(){
                 for(int j=0;j<WIDTH;j++){
                     if(pieces[i][j] != NULL){
                         if(pieces[i][j]->movements == NULL) calculateMovements(i,j);
-                        window.draw(pieces[i][j]->sprite);
+                        if(pieces[i][j] != heldPiece) window.draw(pieces[i][j]->sprite);
                     }
                 }
             }
 
             // If there is no piece being held, we draw the hand
             if(heldPiece == NULL){
-                    spriteHand.setPosition(sf::Vector2f(mousePosition.x-PIXELS_PER_SQUARE/2,mousePosition.y-PIXELS_PER_SQUARE/2));
-                    window.draw(spriteHand);
+                spriteHand.setPosition(sf::Vector2f(mousePosition.x-PIXELS_PER_SQUARE/2,mousePosition.y-PIXELS_PER_SQUARE/2));
+                window.draw(spriteHand);
+            } else {
+                // If we are holding a piece, we draw it on top of everything
+                window.draw(heldPiece->sprite);
             }
 
 
