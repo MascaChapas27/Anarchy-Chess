@@ -38,6 +38,9 @@
 		</Compiler>
 		<Unit filename="Board.cpp" />
 		<Unit filename="Board.hpp" />
+		<Unit filename="Constants.hpp" />
+		<Unit filename="Particle.cpp" />
+		<Unit filename="Particle.hpp" />
 		<Unit filename="Piece.cpp" />
 		<Unit filename="Piece.hpp" />
 		<Unit filename="main.cpp" />

@@ -2,13 +2,16 @@
 #define __BOARD_HPP__
 
 #include "Piece.hpp"
+#include "Particle.hpp"
 
-const int WIDTH = 8;
-const int HEIGHT = 8;
-const int PIXELS_PER_SQUARE = 64;
+#include "Constants.hpp"
 
 enum Outcome {
-    OK, CHECKMATE, STALEMATE
+    OK, CHECKMATE, STALEMATE, FRONT_FACING_HORSEY
+};
+
+enum WindowMovement {
+    DOWN, SHAKE, STILL
 };
 
 class Board{
@@ -22,6 +25,12 @@ private:
     // them as well or else nothing works
     sf::Texture * texturesPiecesBlack = new sf::Texture();
     sf::Texture * texturesPiecesWhite = new sf::Texture();
+
+    // Texture for the particles
+    sf::Texture * textureParticles = new sf::Texture();
+
+    // List of particles that are currently on screen
+    std::list<Particle> * listParticles = new std::list<Particle>();
 
     // Rectangles for every piece
     sf::IntRect rectanglePawn;
@@ -62,7 +71,7 @@ private:
     // The board is represented by a matrix of pointers to pieces
     // (if the pointer is null there is no piece, if it's not null
     // then it points at a piece)
-    Piece * pieces[HEIGHT][WIDTH];
+    Piece * pieces[constants::HEIGHT][constants::WIDTH];
 
     // True when the king has been captured or there is a stalemate
     bool gameOver = false;
@@ -72,6 +81,12 @@ private:
 
     // Piece that we are holding
     Piece * heldPiece = NULL;
+
+    // Current window movement
+    WindowMovement movement;
+
+    // Current state of the window movement
+    int movementState;
 
     // Helper function that calculates all movements of a piece and
     // updates its list of movements
@@ -83,7 +98,14 @@ private:
     // Helper function called when changing the position of a piece
     Outcome changeTurn();
 
+    // Draws particles and moves them
+    void updateParticles();
 
+    // Moves the window
+    void moveWindow();
+
+    // Sets the current type of movement for the window
+    void setMovement(WindowMovement m);
 
 public:
     Board();

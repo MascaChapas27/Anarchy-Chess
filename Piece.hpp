@@ -35,7 +35,7 @@ private:
     bool hasMoved;
 
 public:
-    Piece(int file, int rank, Type type, bool isWhite, sf::Texture * texture, sf::IntRect rectangle, int pixelsPerSquare);
+    Piece(int file, int rank, Type type, bool isWhite, sf::Texture * texture, sf::IntRect rectangle);
     ~Piece();
 };
 
