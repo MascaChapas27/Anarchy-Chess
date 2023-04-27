@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1682629627 source:c:\users\angel\desktop\mis programas\anarchy chess\board.cpp
+1682630595 source:c:\users\angel\desktop\mis programas\anarchy chess\board.cpp
 	"Board.hpp"
 	<iostream>
 

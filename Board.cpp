@@ -356,13 +356,17 @@ void Board::play(){
                             sf::IntRect rectangle(p->sprite.getTextureRect());
                             rectangle.left+=constants::PIXELS_PER_SQUARE;
                             heldPiece->sprite.setTextureRect(rectangle);
+                            heldPiece->sprite.setPosition(sf::Vector2f(mousePosition.x,mousePosition.y));
+                            // We change the origin for a moment to rotate the piece a bit
+                            heldPiece->sprite.setOrigin(constants::PIXELS_PER_SQUARE/2,constants::PIXELS_PER_SQUARE/2);
+                            heldPiece->sprite.rotate(-30);
                         }
                     }
                 } else {
                     // If we are holding a piece, we check if we are still holding it
                     if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
                         // If we are still holding it we update the position and draw its moves
-                        heldPiece->sprite.setPosition(sf::Vector2f(mousePosition.x-constants::PIXELS_PER_SQUARE/2,mousePosition.y-constants::PIXELS_PER_SQUARE/2));
+                        heldPiece->sprite.setPosition(sf::Vector2f(mousePosition.x,mousePosition.y));
                         drawMoves(heldPiece);
                     } else {
                         // If we drop it, we check if the position is valid
@@ -373,6 +377,8 @@ void Board::play(){
                             if(it->second == x && it->first == y){
                                 // If it is, we drop the piece in that position
                                 startCircleEffect(x*constants::PIXELS_PER_SQUARE,y*constants::PIXELS_PER_SQUARE);
+                                heldPiece->sprite.setOrigin(0,0);
+                                heldPiece->sprite.setRotation(0);
                                 heldPiece->sprite.setPosition(sf::Vector2f(x*constants::PIXELS_PER_SQUARE,y*constants::PIXELS_PER_SQUARE));
                                 found=true;
                                 changeTurn(x,y);
@@ -382,8 +388,9 @@ void Board::play(){
                         if(!found) {
                             // If the position is invalid, we send the piece to its original place and
                             // set the sprite to the normal one
+                            heldPiece->sprite.setOrigin(0,0);
+                            heldPiece->sprite.setRotation(0);
                             heldPiece->sprite.setPosition(sf::Vector2f(heldPiece->file * constants::PIXELS_PER_SQUARE, heldPiece->rank * constants::PIXELS_PER_SQUARE));
-
                             sf::IntRect rectangle(heldPiece->sprite.getTextureRect());
                             rectangle.left-=constants::PIXELS_PER_SQUARE;
                             heldPiece->sprite.setTextureRect(rectangle);
@@ -404,12 +411,18 @@ void Board::play(){
                 }
             }
 
+
             // If there is no piece being held, we draw the hand
             if(heldPiece == NULL){
                 spriteHand.setPosition(sf::Vector2f(mousePosition.x-constants::PIXELS_PER_SQUARE/2,mousePosition.y-constants::PIXELS_PER_SQUARE/2));
                 window.draw(spriteHand);
             } else {
-                // If we are holding a piece, we draw it on top of everything
+
+                // If we are holding a piece, first we check if it's rotated and we correct it a bit
+                if(heldPiece->sprite.getRotation() > 0){
+                    heldPiece->sprite.rotate(5);
+                }
+                // Then we draw it
                 window.draw(heldPiece->sprite);
             }
 
