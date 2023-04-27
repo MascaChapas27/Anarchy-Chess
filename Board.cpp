@@ -35,6 +35,14 @@ Board::Board(){
 
     textureHands.loadFromFile("textures/hands.png");
 
+    textureCircleEffect.loadFromFile("textures/circleEffect.png");
+
+    spriteCircleEffect.setTexture(textureCircleEffect);
+    sf::IntRect r(0,0,constants::PIXELS_PER_SQUARE,constants::PIXELS_PER_SQUARE);
+    spriteCircleEffect.setTextureRect(r);
+
+    counterCircleEffect = -1;
+
     rectangleWhiteHand = sf::IntRect(0,0,constants::PIXELS_PER_SQUARE,constants::PIXELS_PER_SQUARE);
     rectangleBlackHand = sf::IntRect(constants::PIXELS_PER_SQUARE,0,constants::PIXELS_PER_SQUARE,constants::PIXELS_PER_SQUARE);
 
@@ -95,6 +103,29 @@ Board::~Board(){
     delete texturesPiecesBlack;
     delete texturesPiecesWhite;
     delete textureParticles;
+}
+
+// Sets the counter for the circle effect to 0 so that updateCircleEffect
+// can start working, also initializes position of effect
+void Board::startCircleEffect(double x, double y){
+    spriteCircleEffect.setPosition(x,y);
+    counterCircleEffect=0;
+}
+
+// Checks if counterCircleEffect is 0 or more, in which case it shows the effect
+// and updates what frame it's showing
+void Board::updateCircleEffect(){
+
+    if(counterCircleEffect >= 0 && counterCircleEffect < 12){
+        sf::IntRect r = spriteCircleEffect.getTextureRect();
+        r.left = counterCircleEffect/2 * constants::PIXELS_PER_SQUARE;
+        spriteCircleEffect.setTextureRect(r);
+        window.draw(spriteCircleEffect);
+        counterCircleEffect+=1;
+    } else {
+        counterCircleEffect = -1;
+    }
+
 }
 
 // Helper function that calculates all possible movements for a piece
@@ -320,6 +351,7 @@ void Board::play(){
                         drawMoves(p);
                         if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
                             // We clicked on a piece so we hold it
+                            startCircleEffect(mousePosition.x-constants::PIXELS_PER_SQUARE/2,mousePosition.y-constants::PIXELS_PER_SQUARE/2);
                             heldPiece = p;
                             sf::IntRect rectangle(p->sprite.getTextureRect());
                             rectangle.left+=constants::PIXELS_PER_SQUARE;
@@ -340,6 +372,7 @@ void Board::play(){
                         for(auto it = heldPiece->movements->begin();it != heldPiece->movements->end();it++){
                             if(it->second == x && it->first == y){
                                 // If it is, we drop the piece in that position
+                                startCircleEffect(x*constants::PIXELS_PER_SQUARE,y*constants::PIXELS_PER_SQUARE);
                                 heldPiece->sprite.setPosition(sf::Vector2f(x*constants::PIXELS_PER_SQUARE,y*constants::PIXELS_PER_SQUARE));
                                 found=true;
                                 changeTurn(x,y);
@@ -381,6 +414,7 @@ void Board::play(){
             }
 
             updateParticles();
+            updateCircleEffect();
             if(movement!=STILL) moveWindow();
 
             window.display();

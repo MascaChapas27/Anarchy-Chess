@@ -66,6 +66,15 @@ private:
     // Sprite for the hand
     sf::Sprite spriteHand;
 
+    // Texture for the grab/release circle effect thing
+    sf::Texture textureCircleEffect;
+
+    // Sprite for the circle effect
+    sf::Sprite spriteCircleEffect;
+
+    // Counter for the current frame of the circle effect
+    int counterCircleEffect;
+
     // The board is represented by a matrix of pointers to pieces
     // (if the pointer is null there is no piece, if it's not null
     // then it points at a piece)
@@ -110,6 +119,12 @@ private:
 
     // Generates a set of particles
     void generateParticles(bool white, double x, double y);
+
+    // Makes a cool circle effect appear in the given position
+    void startCircleEffect(double x, double y);
+
+    // Checks if the circle effect should be shown
+    void updateCircleEffect();
 
 public:
     Board();
