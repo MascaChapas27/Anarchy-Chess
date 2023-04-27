@@ -1,7 +1,7 @@
 #include "Piece.hpp"
 #include "Constants.hpp"
 
-Piece::Piece(int file, int rank, Type type, bool isWhite, sf::Texture * texture, sf::IntRect rectangle){
+Piece::Piece(int file, int rank, constants::Type type, bool isWhite, sf::Texture * texture, sf::IntRect rectangle){
     this->file = file;
     this->rank = rank;
     this->type = type;

@@ -2,6 +2,7 @@
 #define __PARTICLE_HPP__
 
 #include <SFML/Graphics.hpp>
+#include "Constants.hpp"
 
 class Particle{
 
@@ -15,7 +16,8 @@ private:
     double rotationSpeed;
     sf::Sprite sprite;
 public:
-    Particle(bool isWhite, double x, double y, sf::Texture texture);
+    Particle(bool isWhite, double x, double y, sf::Texture * texture);
+    Particle(constants::Type t, bool isWhite, double x, double y, sf::Texture * texture);
     bool update();
 };
 

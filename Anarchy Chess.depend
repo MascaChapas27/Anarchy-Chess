@@ -1,20 +1,21 @@
 # depslib dependency file v1.0
-1682455331 source:c:\users\angel\desktop\mis programas\anarchy chess\board.cpp
+1682611259 source:c:\users\angel\desktop\mis programas\anarchy chess\board.cpp
 	"Board.hpp"
+	<iostream>
 
 1682185213 source:c:\users\angel\desktop\mis programas\anarchy chess\main.cpp
 	"Board.hpp"
 
-1682455044 c:\users\angel\desktop\mis programas\anarchy chess\board.hpp
+1682610336 c:\users\angel\desktop\mis programas\anarchy chess\board.hpp
 	"Piece.hpp"
 	"Particle.hpp"
-	"Constants.hpp"
 
-1682454025 c:\users\angel\desktop\mis programas\anarchy chess\piece.hpp
+1682610176 c:\users\angel\desktop\mis programas\anarchy chess\piece.hpp
 	<SFML/Graphics.hpp>
+	"Constants.hpp"
 	<list>
 
-1682454034 source:c:\users\angel\desktop\mis programas\anarchy chess\piece.cpp
+1682610256 source:c:\users\angel\desktop\mis programas\anarchy chess\piece.cpp
 	"Piece.hpp"
 	"Constants.hpp"
 
@@ -427,12 +428,13 @@
 	<SFML/Graphics/Drawable.hpp>
 	<SFML/Window/GlResource.hpp>
 
-1682454409 c:\users\angel\desktop\mis programas\anarchy chess\particle.hpp
+1682610239 c:\users\angel\desktop\mis programas\anarchy chess\particle.hpp
 	<SFML/Graphics.hpp>
+	"Constants.hpp"
 
-1682454239 source:c:\users\angel\desktop\mis programas\anarchy chess\particle.cpp
+1682611407 source:c:\users\angel\desktop\mis programas\anarchy chess\particle.cpp
 	"Particle.hpp"
 	"Constants.hpp"
 
-1682453904 c:\users\angel\desktop\mis programas\anarchy chess\constants.hpp
+1682610213 c:\users\angel\desktop\mis programas\anarchy chess\constants.hpp
 

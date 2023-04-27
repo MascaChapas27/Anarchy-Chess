@@ -4,8 +4,6 @@
 #include "Piece.hpp"
 #include "Particle.hpp"
 
-#include "Constants.hpp"
-
 enum Outcome {
     OK, CHECKMATE, STALEMATE, FRONT_FACING_HORSEY
 };
@@ -30,7 +28,7 @@ private:
     sf::Texture * textureParticles = new sf::Texture();
 
     // List of particles that are currently on screen
-    std::list<Particle> * listParticles = new std::list<Particle>();
+    std::list<Particle*> listParticles;
 
     // Rectangles for every piece
     sf::IntRect rectanglePawn;
@@ -96,7 +94,7 @@ private:
     void drawMoves(Piece * piece);
 
     // Helper function called when changing the position of a piece
-    Outcome changeTurn();
+    Outcome changeTurn(int x, int y);
 
     // Draws particles and moves them
     void updateParticles();
@@ -106,6 +104,12 @@ private:
 
     // Sets the current type of movement for the window
     void setMovement(WindowMovement m);
+
+    // Generates a set of particles and a special particle for the captured piece
+    void generateParticles(constants::Type t, bool white, double x, double y);
+
+    // Generates a set of particles
+    void generateParticles(bool white, double x, double y);
 
 public:
     Board();

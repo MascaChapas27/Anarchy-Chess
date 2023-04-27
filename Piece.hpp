@@ -2,11 +2,8 @@
 #define __PIECE_HPP__
 
 #include <SFML/Graphics.hpp>
+#include "Constants.hpp"
 #include <list>
-
-enum Type {
-    PAWN, KNOOK, HORSEY, ROOK, BISHOP, KING, QUEEN, KNISHOP
-};
 
 class Piece{
 private:
@@ -18,7 +15,7 @@ private:
     int file, rank;
 
     // Type of the piece
-    Type type;
+    constants::Type type;
 
     // True if white, false if black
     bool isWhite;
@@ -35,7 +32,7 @@ private:
     bool hasMoved;
 
 public:
-    Piece(int file, int rank, Type type, bool isWhite, sf::Texture * texture, sf::IntRect rectangle);
+    Piece(int file, int rank, constants::Type type, bool isWhite, sf::Texture * texture, sf::IntRect rectangle);
     ~Piece();
 };
 

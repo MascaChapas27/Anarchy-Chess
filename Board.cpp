@@ -1,4 +1,5 @@
 #include "Board.hpp"
+#include <iostream>
 
 Board::Board(){
 
@@ -45,18 +46,18 @@ Board::Board(){
     movementState = 0;
 
     // First rank
-    pieces[0][0] = new Piece(0,0,ROOK,false,texturesPiecesBlack,rectangleRook);
-    pieces[0][1] = new Piece(1,0,HORSEY,false,texturesPiecesBlack,rectangleHorsey);
-    pieces[0][2] = new Piece(2,0,KNISHOP,false,texturesPiecesBlack,rectangleKnishop);
-    pieces[0][3] = new Piece(3,0,QUEEN,false,texturesPiecesBlack,rectangleQueen);
-    pieces[0][4] = new Piece(4,0,KING,false,texturesPiecesBlack,rectangleKing);
-    pieces[0][5] = new Piece(5,0,BISHOP,false,texturesPiecesBlack,rectangleBishop);
-    pieces[0][6] = new Piece(6,0,HORSEY,false,texturesPiecesBlack,rectangleHorsey);
-    pieces[0][7] = new Piece(7,0,KNOOK,false,texturesPiecesBlack,rectangleKnook);
+    pieces[0][0] = new Piece(0,0,constants::ROOK,false,texturesPiecesBlack,rectangleRook);
+    pieces[0][1] = new Piece(1,0,constants::HORSEY,false,texturesPiecesBlack,rectangleHorsey);
+    pieces[0][2] = new Piece(2,0,constants::KNISHOP,false,texturesPiecesBlack,rectangleKnishop);
+    pieces[0][3] = new Piece(3,0,constants::QUEEN,false,texturesPiecesBlack,rectangleQueen);
+    pieces[0][4] = new Piece(4,0,constants::KING,false,texturesPiecesBlack,rectangleKing);
+    pieces[0][5] = new Piece(5,0,constants::BISHOP,false,texturesPiecesBlack,rectangleBishop);
+    pieces[0][6] = new Piece(6,0,constants::HORSEY,false,texturesPiecesBlack,rectangleHorsey);
+    pieces[0][7] = new Piece(7,0,constants::KNOOK,false,texturesPiecesBlack,rectangleKnook);
 
     // Second rank
     for(int i=0;i<constants::WIDTH;i++){
-        pieces[1][i] = new Piece(i,1,PAWN,false,texturesPiecesBlack,rectanglePawn);
+        pieces[1][i] = new Piece(i,1,constants::PAWN,false,texturesPiecesBlack,rectanglePawn);
     }
 
     // Empty ranks in the middle
@@ -68,18 +69,18 @@ Board::Board(){
 
     // Seventh rank
     for(int i=0;i<constants::WIDTH;i++){
-        pieces[6][i] = new Piece(i,6,PAWN,true,texturesPiecesWhite,rectanglePawn);
+        pieces[6][i] = new Piece(i,6,constants::PAWN,true,texturesPiecesWhite,rectanglePawn);
     }
 
     // Eighth rank
-    pieces[7][0] = new Piece(0,7,KNOOK,true,texturesPiecesWhite,rectangleKnook);
-    pieces[7][1] = new Piece(1,7,HORSEY,true,texturesPiecesWhite,rectangleHorsey);
-    pieces[7][2] = new Piece(2,7,BISHOP,true,texturesPiecesWhite,rectangleBishop);
-    pieces[7][3] = new Piece(3,7,QUEEN,true,texturesPiecesWhite,rectangleQueen);
-    pieces[7][4] = new Piece(4,7,KING,true,texturesPiecesWhite,rectangleKing);
-    pieces[7][5] = new Piece(5,7,KNISHOP,true,texturesPiecesWhite,rectangleKnishop);
-    pieces[7][6] = new Piece(6,7,HORSEY,true,texturesPiecesWhite,rectangleHorsey);
-    pieces[7][7] = new Piece(7,7,ROOK,true,texturesPiecesWhite,rectangleRook);
+    pieces[7][0] = new Piece(0,7,constants::KNOOK,true,texturesPiecesWhite,rectangleKnook);
+    pieces[7][1] = new Piece(1,7,constants::HORSEY,true,texturesPiecesWhite,rectangleHorsey);
+    pieces[7][2] = new Piece(2,7,constants::BISHOP,true,texturesPiecesWhite,rectangleBishop);
+    pieces[7][3] = new Piece(3,7,constants::QUEEN,true,texturesPiecesWhite,rectangleQueen);
+    pieces[7][4] = new Piece(4,7,constants::KING,true,texturesPiecesWhite,rectangleKing);
+    pieces[7][5] = new Piece(5,7,constants::KNISHOP,true,texturesPiecesWhite,rectangleKnishop);
+    pieces[7][6] = new Piece(6,7,constants::HORSEY,true,texturesPiecesWhite,rectangleHorsey);
+    pieces[7][7] = new Piece(7,7,constants::ROOK,true,texturesPiecesWhite,rectangleRook);
 }
 
 Board::~Board(){
@@ -94,7 +95,6 @@ Board::~Board(){
     delete texturesPiecesBlack;
     delete texturesPiecesWhite;
     delete textureParticles;
-    delete listParticles;
 }
 
 // Helper function that calculates all possible movements for a piece
@@ -103,23 +103,23 @@ void Board::calculateMovements(int i, int j){
     pieces[i][j]->movements = new std::list<std::pair<int,int>>();
 
     switch(pieces[i][j]->type){
-    case PAWN:
+    case constants::PAWN:
 
         if(pieces[i][j]->isWhite){
             // We see if it can move upwards
-            if(i-1>0 && pieces[i-1][j] == NULL)
+            if(i-1>=0 && pieces[i-1][j] == NULL)
                 pieces[i][j]->movements->insert(pieces[i][j]->movements->begin(),std::pair<int,int>(i-1,j));
 
             // We see if it can move upwards twice
-            if(!pieces[i][j]->hasMoved && i-2>0 && pieces[i-2][j] == NULL)
+            if(!pieces[i][j]->hasMoved && i-2>=0 && pieces[i-2][j] == NULL)
                 pieces[i][j]->movements->insert(pieces[i][j]->movements->begin(),std::pair<int,int>(i-2,j));
 
             // We see if there is an enemy piece that can be holy hell'd on its left
-            if(j-1>0 && i-1>0 && pieces[i][j-1] != NULL && !pieces[i][j-1]->isWhite && pieces[i-1][j-1] == NULL)
+            if(j-1>=0 && i-1>=0 && ((pieces[i][j-1] != NULL && !pieces[i][j-1]->isWhite) || (pieces[i-1][j-1] != NULL && !pieces[i-1][j-1]->isWhite)))
                 pieces[i][j]->movements->insert(pieces[i][j]->movements->begin(),std::pair<int,int>(i-1,j-1));
 
             // The same with the piece on its right
-            if(j+1<constants::WIDTH && i-1>0 && pieces[i][j+1] != NULL && !pieces[i][j+1]->isWhite && pieces[i-1][j+1] == NULL)
+            if(j+1<constants::WIDTH && i-1>=0 && ((pieces[i][j+1] != NULL && !pieces[i][j+1]->isWhite) || (pieces[i-1][j+1] != NULL && !pieces[i-1][j+1]->isWhite)))
                 pieces[i][j]->movements->insert(pieces[i][j]->movements->begin(),std::pair<int,int>(i-1,j+1));
 
         } else {
@@ -133,28 +133,28 @@ void Board::calculateMovements(int i, int j){
                 pieces[i][j]->movements->insert(pieces[i][j]->movements->begin(),std::pair<int,int>(i+2,j));
 
             // We see if there is an enemy piece that can be holy hell'd on its left
-            if(j-1>0 && i+1 < constants::HEIGHT && pieces[i][j-1] != NULL && pieces[i][j-1]->isWhite && pieces[i+1][j-1] == NULL)
+            if(j-1>=0 && i+1 < constants::HEIGHT && ((pieces[i][j-1] != NULL && pieces[i][j-1]->isWhite) || (pieces[i+1][j-1] != NULL && pieces[i+1][j-1]->isWhite)))
                 pieces[i][j]->movements->insert(pieces[i][j]->movements->begin(),std::pair<int,int>(i+1,j-1));
 
             // The same with the piece on its right
-            if(j+1<constants::WIDTH && i+1 < constants::HEIGHT && pieces[i][j+1] != NULL && pieces[i][j+1]->isWhite && pieces[i+1][j+1] == NULL)
+            if(j+1<constants::WIDTH && i+1 < constants::HEIGHT && ((pieces[i][j+1] != NULL && pieces[i][j+1]->isWhite) || (pieces[i+1][j+1] != NULL && pieces[i+1][j+1]->isWhite)))
                 pieces[i][j]->movements->insert(pieces[i][j]->movements->begin(),std::pair<int,int>(i+1,j+1));
         }
 
         break;
-    case ROOK:
+    case constants::ROOK:
         break;
-    case HORSEY:
+    case constants::HORSEY:
         break;
-    case BISHOP:
+    case constants::BISHOP:
         break;
-    case KING:
+    case constants::KING:
         break;
-    case QUEEN:
+    case constants::QUEEN:
         break;
-    case KNOOK:
+    case constants::KNOOK:
         break;
-    case KNISHOP:
+    case constants::KNISHOP:
         break;
     }
 }
@@ -173,13 +173,14 @@ void Board::drawMoves(Piece * piece){
 
 // Updates the particles on the screen
 void Board::updateParticles(){
-    std::list<Particle>::iterator it = listParticles->begin();
-    while(it != listParticles->end()){
-        window.draw(it->sprite);
-        if(it->update()){
+    std::list<Particle*>::iterator it = listParticles.begin();
+    while(it != listParticles.end()){
+        window.draw((*it)->sprite);
+        if((*it)->update()){
             // If the element should be erased, we erase it
             // This happens when it reaches the botton of the window
-            listParticles->erase(it);
+            delete *it;
+            it = listParticles.erase(it);
         } else {
             it++;
         }
@@ -199,9 +200,9 @@ void Board::moveWindow(){
         break;
 
     case SHAKE:
-        if(movementState % 2){
+        if(movementState % 4 == 0){
             winPos.x -= movementState;
-        } else {
+        } else if(movementState % 4 == 3){
             winPos.x += movementState;
         }
         break;
@@ -220,15 +221,28 @@ void Board::setMovement(WindowMovement m){
         movementState = 10;
         break;
     case SHAKE:
-        movementState = 20;
+        movementState = 30;
         break;
     default:
         break;
     }
 }
 
+void Board::generateParticles(constants::Type t, bool white, double x, double y){
+    generateParticles(white,x,y);
+    Particle * p = new Particle(t,white,x,y,textureParticles);
+    listParticles.insert(listParticles.begin(),p);
+}
+
+void Board::generateParticles(bool white, double x, double y){
+    for(int i=0;i<5;i++){
+        Particle * p = new Particle(white,x,y,textureParticles);
+        listParticles.insert(listParticles.begin(),p);
+    }
+}
+
 // We just placed a piece in a valid position so we have to do stuff
-Outcome Board::changeTurn(){
+Outcome Board::changeTurn(int x, int y){
     // The held piece has moved of course
     heldPiece->hasMoved = true;
     // The held piece has the right sprite now
@@ -236,6 +250,31 @@ Outcome Board::changeTurn(){
     rectangle.left-=constants::PIXELS_PER_SQUARE;
     heldPiece->sprite.setTextureRect(rectangle);
     // If position has value eliminate piece and add animation and window movements
+    if(pieces[y][x]!=NULL){
+        generateParticles(pieces[y][x]->type, pieces[y][x]->isWhite, x*constants::PIXELS_PER_SQUARE, y*constants::PIXELS_PER_SQUARE);
+        delete pieces[y][x];
+        setMovement(SHAKE);
+    } else {
+        setMovement(DOWN);
+    }
+
+    pieces[y][x] = heldPiece;
+    pieces[heldPiece->rank][heldPiece->file] = NULL;
+    heldPiece->file = x;
+    heldPiece->rank = y;
+
+
+    // We set all pieces' movements to NULL so that they have to
+    // be calculated again
+    for(int i=0;i<constants::HEIGHT;i++){
+        for(int j=0;j<constants::WIDTH;j++){
+            if(pieces[i][j]!=NULL){
+                delete pieces[i][j]->movements;
+                pieces[i][j]->movements = NULL;
+            }
+        }
+    }
+
     // Check if holy hell
     // Check vaticano
     // Update matrix, eliminate old piece, put piece in new position
@@ -244,8 +283,9 @@ Outcome Board::changeTurn(){
     heldPiece = NULL;
     // Change the turn
     whitesTurn = !whitesTurn;
-    // We move the window down a bit (so cool)
-    setMovement(DOWN);
+    // Change the color of the hand
+    if(whitesTurn) spriteHand.setTextureRect(rectangleWhiteHand);
+    else spriteHand.setTextureRect(rectangleBlackHand);
     return OK;
 }
 
@@ -302,7 +342,7 @@ void Board::play(){
                                 // If it is, we drop the piece in that position
                                 heldPiece->sprite.setPosition(sf::Vector2f(x*constants::PIXELS_PER_SQUARE,y*constants::PIXELS_PER_SQUARE));
                                 found=true;
-                                changeTurn();
+                                changeTurn(x,y);
                                 break;
                             }
                         }
