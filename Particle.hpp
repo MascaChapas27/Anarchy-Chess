@@ -18,6 +18,7 @@ private:
 public:
     Particle(bool isWhite, double x, double y, sf::Texture * texture);
     Particle(constants::Type t, bool isWhite, double x, double y, sf::Texture * texture);
+    Particle(int x, int y, sf::Texture * texture);
     bool update();
 };
 

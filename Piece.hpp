@@ -31,6 +31,10 @@ private:
     // and kings, rooks and knooks (castling)
     bool hasMoved;
 
+    // Flag that activates if we shake the piece (useful for easter eggs like the
+    // knook losing its sunglasses when shaken)
+    bool movedTooMuch;
+
 public:
     Piece(int file, int rank, constants::Type type, bool isWhite, sf::Texture * texture, sf::IntRect rectangle);
     ~Piece();

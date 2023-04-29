@@ -1,5 +1,6 @@
 #include "Board.hpp"
 #include <iostream>
+#include <cmath>
 
 Board::Board(){
 
@@ -42,6 +43,8 @@ Board::Board(){
     spriteCircleEffect.setTextureRect(r);
 
     counterCircleEffect = -1;
+
+    previousMousePosition = sf::Vector2i(0,0);
 
     rectangleWhiteHand = sf::IntRect(0,0,constants::PIXELS_PER_SQUARE,constants::PIXELS_PER_SQUARE);
     rectangleBlackHand = sf::IntRect(constants::PIXELS_PER_SQUARE,0,constants::PIXELS_PER_SQUARE,constants::PIXELS_PER_SQUARE);
@@ -266,7 +269,7 @@ void Board::generateParticles(constants::Type t, bool white, double x, double y)
 }
 
 void Board::generateParticles(bool white, double x, double y){
-    for(int i=0;i<5;i++){
+    for(int i=0;i<8;i++){
         Particle * p = new Particle(white,x,y,textureParticles);
         listParticles.insert(listParticles.begin(),p);
     }
@@ -283,6 +286,13 @@ Outcome Board::changeTurn(int x, int y){
     // If position has value eliminate piece and add animation and window movements
     if(pieces[y][x]!=NULL){
         generateParticles(pieces[y][x]->type, pieces[y][x]->isWhite, x*constants::PIXELS_PER_SQUARE, y*constants::PIXELS_PER_SQUARE);
+
+        // Additionally, if we capture a knook we check if it has sunglasses and we drop them as well
+        if(pieces[y][x]->type==constants::KNOOK && !pieces[y][x]->movedTooMuch){
+            Particle * sunglasses = new Particle(x,y,textureParticles);
+            listParticles.insert(listParticles.begin(),sunglasses);
+        }
+
         delete pieces[y][x];
         setMovement(SHAKE);
     } else {
@@ -368,6 +378,23 @@ void Board::play(){
                         // If we are still holding it we update the position and draw its moves
                         heldPiece->sprite.setPosition(sf::Vector2f(mousePosition.x,mousePosition.y));
                         drawMoves(heldPiece);
+
+                        // Additionally, we check if we are moving it very fast for cool
+                        // easter eggs and effects
+                        if(pow(pow(mousePosition.x-previousMousePosition.x,2)+pow(mousePosition.y-previousMousePosition.y,2),0.5) > 150 &&
+                           !heldPiece->movedTooMuch && heldPiece->type == constants::KNOOK){
+
+                            // Special sprite for knook without sunglasses
+                            sf::IntRect rectangle(constants::PIXELS_PER_SQUARE,4*constants::PIXELS_PER_SQUARE,constants::PIXELS_PER_SQUARE,constants::PIXELS_PER_SQUARE);
+                            heldPiece->sprite.setTextureRect(rectangle);
+
+                            heldPiece->movedTooMuch = true;
+
+                            // We drop the sunglasses
+                            Particle * sunglasses = new Particle(mousePosition.x,mousePosition.y,textureParticles);
+                            listParticles.insert(listParticles.begin(),sunglasses);
+                        }
+
                     } else {
                         // If we drop it, we check if the position is valid
                         int x = mousePosition.x / constants::PIXELS_PER_SQUARE;
@@ -431,6 +458,9 @@ void Board::play(){
             if(movement!=STILL) moveWindow();
 
             window.display();
+
+            // We go to the next frame so the current mouse position becomes the old mouse position
+            previousMousePosition = mousePosition;
         }
     }
 }

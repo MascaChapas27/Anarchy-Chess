@@ -80,6 +80,9 @@ private:
     // then it points at a piece)
     Piece * pieces[constants::HEIGHT][constants::WIDTH];
 
+    // The mouse position in the last turn, used to check the speed of the mouse
+    sf::Vector2i previousMousePosition;
+
     // True when the king has been captured or there is a stalemate
     bool gameOver = false;
 

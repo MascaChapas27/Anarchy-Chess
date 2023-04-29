@@ -11,6 +11,7 @@ Piece::Piece(int file, int rank, constants::Type type, bool isWhite, sf::Texture
     this->sprite.setTextureRect(rectangle);
     this->movements = NULL;
     this->hasMoved = false;
+    this->movedTooMuch = 0;
 }
 
 Piece::~Piece(){
